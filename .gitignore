@@ -1,0 +1,4 @@
+backend-python/app/__pycache__/*
+backend-python/app/Endpoints/__pycache__/*
+db-postgres/postgresData/*
+grafana/grafanaData/*

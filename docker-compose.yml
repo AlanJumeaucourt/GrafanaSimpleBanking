@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  db-postgres:
+    image: postgres:14.1-alpine
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes: 
+      - postgres-data:/var/lib/postgresql/data
+      - ./db-postgres/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  grafana:
+    image: grafana/grafana:10.0.2
+    depends_on:
+        - db-postgres
+    ports:
+        - 3000:3000
+    environment:
+    - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=1s
+    - GF_INSTALL_PLUGINS=marcusolsson-json-datasource
+    volumes:
+    - ./grafana/provisioning:/etc/grafana/provisioning
+    - grafana-data:/var/lib/grafana
+
+volumes:
+   grafana-data:
+   postgres-data:
